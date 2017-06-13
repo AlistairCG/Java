@@ -3,7 +3,8 @@ package A1_Jac444;
 import java.util.Scanner;
 
 public class SumProdDifQuo {
-	//Program will sum ints using input from the user
+	//Program will loop while accepting 2 ints for use. 
+	// Finds and displays product, quotient, sum, and difference.
 		public static void main(String[] args) {
 			
 			int exit = 0;
