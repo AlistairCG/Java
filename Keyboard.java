@@ -25,9 +25,22 @@ public class Keyboard extends JFrame{
 		//Label Container
 		JPanel Lbl  = new JPanel();
 		Lbl.setLayout(new FlowLayout(FlowLayout.LEADING));
+		
 		//Holds Text Area
 		JPanel Keys = new JPanel();
+		//Eat 100% of available panel space
+		Keys.setLayout(new GridLayout(1,1));
 		
+		//==============TextArea=============//
+		//Make a scrolling text area. Prevents shaking component and makes sure text wraps.
+		//Wrapping via Javadocs instructions
+		JTextArea TextArea = new JTextArea();
+		TextArea.setLineWrap(true);
+		TextArea.setWrapStyleWord(true);
+	
+		JScrollPane TxtArea_ = new JScrollPane(TextArea);
+		//=============================//
+	
 		//Holds Both the Lbl and Text area as required by assignment dimensions
 		JPanel Hold = new JPanel();
 		Hold.setLayout(new BoxLayout(Hold,BoxLayout.Y_AXIS));	//Make Hold place components
@@ -55,6 +68,7 @@ public class Keyboard extends JFrame{
 		
 		//=====Add all components to the Frame and Panel(s)====//
 		Lbl.add(Lbl_txt);
+		Keys.add(TxtArea_);
 		Hold.add(Lbl);
 		Hold.add(Keys);
 		Contain.add(Hold);
