@@ -18,11 +18,14 @@ public class Keyboard extends JFrame{
 	private JLabel Lbl_txt = new JLabel();
 	//===============================//
 	
+	private static String [] KeysText = {"~","1","2","3","4","5","6","7","8","9","0","-","+","BackSpace"};
+	
+	
 	public Keyboard() {
 		
 		this.setTitle("Typing Tutor");
 		this.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));		
-		this.setSize(750, 630);  
+		this.setSize(850, 630);  
 		
 		//Global Container 
 		Contain.setLayout(new BoxLayout(Contain,BoxLayout.Y_AXIS));
@@ -32,6 +35,9 @@ public class Keyboard extends JFrame{
 		Hold.setLayout(new BoxLayout(Hold,BoxLayout.Y_AXIS));	//Make Hold place components
 		//Eat 100% of available panel space
 		Keys.setLayout(new GridLayout(1,1));
+		
+		Kb.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
+		SetKeys(Kb);
 		
 		//==============TextArea=============//
 		//Prevents shaking component and makes sure text wraps.
@@ -48,12 +54,11 @@ public class Keyboard extends JFrame{
 		//Lbl.setBackground(new Color(150,100,100));
 		Keys.setBackground(new Color(100,200,200));
 		Kb.setBackground(new Color(100,100,100));
-		Hold.setBackground(new Color(200,200,100));
 		
 		//Make space as specified by the assignment.
-		Lbl.setPreferredSize(new Dimension(720,50));
-		Keys.setPreferredSize(new Dimension(320,200));
-		Kb.setPreferredSize(new Dimension(720,300));
+		Lbl.setPreferredSize(new Dimension(820,50));
+		Keys.setPreferredSize(new Dimension(420,200));
+		Kb.setPreferredSize(new Dimension(820,300));
 		//Make an invisible divider while keeping the components vertically stacked
 		Padding.setPreferredSize(new Dimension(25,20));
 			
@@ -75,7 +80,38 @@ public class Keyboard extends JFrame{
 		this.setResizable(true);
 		
 	}
+	//Write some buttons using the array lines.
+	public static void SetKeys(Container kb) {
+		for(int i = 0; i < KeysText.length; i++) {
+		
+			switch(i) {
+				case 13: 
+					JButton button_Ext = new JButton(GetNextKey(i));
+					button_Ext.setAlignmentX(Component.CENTER_ALIGNMENT);
+					button_Ext.setPreferredSize(new Dimension(105,50));
+					button_Ext.setFont(new Font("Arial",Font.BOLD,12));
+					kb.add(button_Ext);
+					break;
+			
+			
+				default:
+					JButton button = new JButton(GetNextKey(i));
+					button.setAlignmentX(Component.CENTER_ALIGNMENT);
+					button.setPreferredSize(new Dimension(55,50));
+					button.setFont(new Font("Arial",Font.BOLD,12));
+					kb.add(button);
+					break;
+			}
+	
+		}
+		
+		
+	}
 
+	public static String GetNextKey(int arrAt) {
+	
+		return KeysText[arrAt];
+	}
 	public static void main (String [] args) {
 		new Keyboard();
 	}
