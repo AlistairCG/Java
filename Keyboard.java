@@ -18,14 +18,17 @@ public class Keyboard extends JFrame{
 	private JLabel Lbl_txt = new JLabel();
 	//===============================//
 	
-	private static String [] KeysText = {"~","1","2","3","4","5","6","7","8","9","0","-","+","BackSpace"};
+	private static String [] KeysText = {"~","1","2","3","4","5","6","7","8","9","0","-","+","Backspace",
+											"Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\", //27
+											"Caps","A","S","D","F","G","H","J","K","L",":","\"","Enter", //40
+											"Shift","Z","X","C","V","B","N","M",",",".","?","","^", " "," "," ","<","v",">"};
 	
 	
 	public Keyboard() {
 		
 		this.setTitle("Typing Tutor");
 		this.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));		
-		this.setSize(850, 630);  
+		this.setSize(858, 630);  
 		
 		//Global Container 
 		Contain.setLayout(new BoxLayout(Contain,BoxLayout.Y_AXIS));
@@ -52,13 +55,13 @@ public class Keyboard extends JFrame{
 				+ " will be displayed.</p><p>Note: Clicking the buttons with your mouse will not perform any action </p></body> </html>");
 
 		//Lbl.setBackground(new Color(150,100,100));
-		Keys.setBackground(new Color(100,200,200));
-		Kb.setBackground(new Color(100,100,100));
+	//	Keys.setBackground(new Color(100,200,200));
+	//	Kb.setBackground(new Color(100,100,100));
 		
 		//Make space as specified by the assignment.
-		Lbl.setPreferredSize(new Dimension(820,50));
-		Keys.setPreferredSize(new Dimension(420,200));
-		Kb.setPreferredSize(new Dimension(820,300));
+		Lbl.setPreferredSize(new Dimension(827,40));
+		Keys.setPreferredSize(new Dimension(420,210));
+		Kb.setPreferredSize(new Dimension(827,300));
 		//Make an invisible divider while keeping the components vertically stacked
 		Padding.setPreferredSize(new Dimension(25,20));
 			
@@ -80,24 +83,68 @@ public class Keyboard extends JFrame{
 		this.setResizable(true);
 		
 	}
-	//Write some buttons using the array lines.
+	//Write some buttons using the array and size them based on the element.
 	public static void SetKeys(Container kb) {
 		for(int i = 0; i < KeysText.length; i++) {
 		
 			switch(i) {
+			//Make a Double Sized key
+				case 41:
+				case 40:
 				case 13: 
 					JButton button_Ext = new JButton(GetNextKey(i));
 					button_Ext.setAlignmentX(Component.CENTER_ALIGNMENT);
-					button_Ext.setPreferredSize(new Dimension(105,50));
+					button_Ext.setPreferredSize(new Dimension(110,60));
 					button_Ext.setFont(new Font("Arial",Font.BOLD,12));
 					kb.add(button_Ext);
 					break;
+		
+			//Make a 1.5 Sized Key
+				case 28:
+				case 14: 
+					JButton button_FullHalf = new JButton(GetNextKey(i));
+					button_FullHalf.setAlignmentX(Component.CENTER_ALIGNMENT);
+					button_FullHalf.setPreferredSize(new Dimension(86,60));
+					button_FullHalf.setFont(new Font("Arial",Font.BOLD,12));
+					kb.add(button_FullHalf);
+					break;
 			
+			//Make a .5 sized invisible panel
+				case 52:
+					JPanel button_Half = new JPanel();
+					button_Half.setPreferredSize(new Dimension(31,60));
+					button_Half.setVisible(true);
+					kb.add(button_Half);
+					break;
 			
+			//Make a space divider for the space bar
+				case 54:
+					JPanel divide = new JPanel();
+					divide.setPreferredSize(new Dimension(218,60));
+					divide.setEnabled(true);
+					divide.setVisible(true);
+					kb.add(divide);
+					break;
+			//Make a space bar key	
+				case 55:
+					JButton button_Space = new JButton(GetNextKey(i));
+					button_Space.setPreferredSize(new Dimension(335,60));
+					kb.add(button_Space);
+					break;
+					
+			//Make a r-side divider for the arrow keys
+				case 56:
+					JPanel divide_r = new JPanel();
+					divide_r.setPreferredSize(new Dimension(83,60));
+					divide_r.setEnabled(true);
+					divide_r.setVisible(true);
+					kb.add(divide_r);
+					break;
+			//Make a standard key
 				default:
 					JButton button = new JButton(GetNextKey(i));
 					button.setAlignmentX(Component.CENTER_ALIGNMENT);
-					button.setPreferredSize(new Dimension(55,50));
+					button.setPreferredSize(new Dimension(55,60));
 					button.setFont(new Font("Arial",Font.BOLD,12));
 					kb.add(button);
 					break;
@@ -107,11 +154,12 @@ public class Keyboard extends JFrame{
 		
 		
 	}
-
+//Return KeysText[element]
 	public static String GetNextKey(int arrAt) {
-	
 		return KeysText[arrAt];
 	}
+	
+//Initialize
 	public static void main (String [] args) {
 		new Keyboard();
 	}
