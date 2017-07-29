@@ -1,6 +1,9 @@
 package a3;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 
@@ -146,6 +149,15 @@ public class Keyboard extends JFrame{
 					button.setAlignmentX(Component.CENTER_ALIGNMENT);
 					button.setPreferredSize(new Dimension(55,60));
 					button.setFont(new Font("Arial",Font.BOLD,12));
+					button.addActionListener(new ActionListener() {
+					
+						//Do in case of regular key
+						public void actionPerformed(ActionEvent e){
+							 JButton test = (JButton)e.getSource();
+						     System.out.println(test.getText());
+						}
+						
+					});
 					kb.add(button);
 					break;
 			}
