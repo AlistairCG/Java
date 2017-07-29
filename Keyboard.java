@@ -1,8 +1,8 @@
 package a3;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -99,6 +99,14 @@ public class Keyboard extends JFrame{
 					button_Ext.setAlignmentX(Component.CENTER_ALIGNMENT);
 					button_Ext.setPreferredSize(new Dimension(110,60));
 					button_Ext.setFont(new Font("Arial",Font.BOLD,12));
+					
+			/*		button_Ext.addActionListener(new ActionListener(){
+						public void actionPerformed(ActionEvent e){
+							 JButton test = (JButton)e.getSource();
+						     System.out.println(test.getText());
+						}
+					});
+			*/
 					kb.add(button_Ext);
 					break;
 		
@@ -109,6 +117,17 @@ public class Keyboard extends JFrame{
 					button_FullHalf.setAlignmentX(Component.CENTER_ALIGNMENT);
 					button_FullHalf.setPreferredSize(new Dimension(86,60));
 					button_FullHalf.setFont(new Font("Arial",Font.BOLD,12));
+					
+				/*	button_FullHalf.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						 JButton test = (JButton)e.getSource();
+					     System.out.println(test.getText());
+					}
+					});
+					
+				 */
+					
+					
 					kb.add(button_FullHalf);
 					break;
 			
@@ -132,9 +151,15 @@ public class Keyboard extends JFrame{
 				case 55:
 					JButton button_Space = new JButton(GetNextKey(i));
 					button_Space.setPreferredSize(new Dimension(335,60));
+					
+				/*	button_Space.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+					     System.out.println("Spacebar");
+					}
+					});
+				*/
 					kb.add(button_Space);
 					break;
-					
 			//Make a r-side divider for the arrow keys
 				case 56:
 					JPanel divide_r = new JPanel();
@@ -149,15 +174,17 @@ public class Keyboard extends JFrame{
 					button.setAlignmentX(Component.CENTER_ALIGNMENT);
 					button.setPreferredSize(new Dimension(55,60));
 					button.setFont(new Font("Arial",Font.BOLD,12));
-					button.addActionListener(new ActionListener() {
+			
+					/*	button.addActionListener(new ActionListener() {
 					
-						//Do in case of regular key
+						//Do in case of regular key. Spit it out to the keyboard.
 						public void actionPerformed(ActionEvent e){
 							 JButton test = (JButton)e.getSource();
 						     System.out.println(test.getText());
 						}
 						
 					});
+					*/
 					kb.add(button);
 					break;
 			}
