@@ -1,14 +1,13 @@
 package a3;
 
 import java.awt.*;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
 
 @SuppressWarnings("serial")
-public class Keyboard extends JFrame{
+public class Keyboard extends JFrame implements KeyListener{
 	//=======Components and Containers==============//
 	private JPanel Contain = new JPanel();
 	private JPanel Padding = new JPanel();
@@ -48,6 +47,7 @@ public class Keyboard extends JFrame{
 		//==============TextArea=============//
 		//Prevents shaking component and makes sure text wraps.
 		//Wrapping via Javadocs style
+		TextArea.addKeyListener(this);
 		TextArea.setLineWrap(true);
 		TextArea.setWrapStyleWord(true);
 		//=============================//
@@ -86,6 +86,30 @@ public class Keyboard extends JFrame{
 		this.setResizable(true);
 		
 	}
+	public void keyTyped(KeyEvent type){
+	
+		//Prevent spamming syso 
+	}
+	public void keyReleased(KeyEvent type) {
+	       //Switch characters() 	
+		  if(type.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+			  String key = KeyEvent.getKeyText(type.getKeyCode());
+			 System.out.println("Traversal: "+ key);
+		 
+		  }else{
+			 char c = type.getKeyChar();
+			 System.out.println(c);
+		 
+		  }
+	}
+	
+	public void keyPressed(KeyEvent type) {
+	    //Switch characters() 
+		
+		
+	}
+	
+	
 	//Write some buttons using the array and size them based on the element.
 	public static void SetKeys(Container kb) {
 		for(int i = 0; i < KeysText.length; i++) {
