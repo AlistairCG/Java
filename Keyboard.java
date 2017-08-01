@@ -68,6 +68,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		//Make an invisible divider while keeping the components vertically stacked
 		Padding.setPreferredSize(new Dimension(25,20));
 			
+		Kb.setFocusTraversalKeysEnabled(false);
 		//=======Add all components to the Frame and Panel(s)====//
 		Lbl.add(Lbl_txt);
 		Keys.add(TxtArea_);
@@ -86,26 +87,32 @@ public class Keyboard extends JFrame implements KeyListener{
 		this.setResizable(true);
 		
 	}
-	public void keyTyped(KeyEvent type){
+	public void keyTyped(KeyEvent type){//Prevent spamming syso 
 	
-		//Prevent spamming syso 
+	 
 	}
 	public void keyReleased(KeyEvent type) {
 	       //Switch characters() 	
-		  if(type.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-			  String key = KeyEvent.getKeyText(type.getKeyCode());
-			 System.out.println("Traversal: "+ key);
-		 
-		  }else{
-			 char c = type.getKeyChar();
-			 System.out.println(c);
-		 
-		  }
+	
+		  
+		  //Skip Line like a typewriter. Spam on syso ends
 	}
 	
 	public void keyPressed(KeyEvent type) {
 	    //Switch characters() 
+
 		
+		  if(isMemberOfArray(KeyEvent.getKeyText(type.getKeyCode()))){
+			  String key = KeyEvent.getKeyText(type.getKeyCode());
+			 System.out.println("Traversal: "+ key);
+		 
+		  }
+		  
+	}
+	
+	public boolean isMemberOfArray(String test) {
+			
+		return false;
 		
 	}
 	
@@ -217,6 +224,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 		
 	}
+	
 //Return KeysText[element]
 	public static String GetNextKey(int arrAt) {
 		return KeysText[arrAt];
