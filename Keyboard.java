@@ -20,7 +20,7 @@ public class Keyboard extends JFrame implements KeyListener{
 	private JLabel Lbl_txt = new JLabel();
 	//===============================//
 	
-	private static String [] KeysText = {"~","1","2","3","4","5","6","7","8","9","0","-","+","Backspace",
+	private static final String [] KeysText = {"~","1","2","3","4","5","6","7","8","9","0","-","+","Backspace",
 											"Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\", //27
 											"Caps","A","S","D","F","G","H","J","K","L",":","\"","Enter", //40
 											"Shift","Z","X","C","V","B","N","M",",",".","?","","^", " "," "," ","<","v",">"};
@@ -112,7 +112,11 @@ public class Keyboard extends JFrame implements KeyListener{
 	
 	public boolean isMemberOfArray(String test) {
 			
-		return false;
+		 for (String s: KeysText) {
+		        if (s.equals(test))
+		            return true;
+		 }
+		 return false;
 		
 	}
 	
