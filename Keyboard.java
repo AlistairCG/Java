@@ -6,6 +6,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
+
+
 @SuppressWarnings("serial")
 public class Keyboard extends JFrame implements KeyListener{
 	//=======Components and Containers==============//
@@ -24,7 +26,7 @@ public class Keyboard extends JFrame implements KeyListener{
 											"Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\", //27
 											"Caps","A","S","D","F","G","H","J","K","L",":","\"","Enter", //40
 											"Shift","Z","X","C","V","B","N","M",",",".","?","","^", " "," "," ","<","v",">"};
-	
+	private boolean isSpam = false; //So shift, backsspace, etc cant be held down and destroy my syso.
 	
 	public Keyboard() {
 		
@@ -68,7 +70,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		//Make an invisible divider while keeping the components vertically stacked
 		Padding.setPreferredSize(new Dimension(25,20));
 			
-		Kb.setFocusTraversalKeysEnabled(false);
+		Kb.setFocusTraversalKeysEnabled(true);
 		//=======Add all components to the Frame and Panel(s)====//
 		Lbl.add(Lbl_txt);
 		Keys.add(TxtArea_);
@@ -88,36 +90,96 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 	}
 	public void keyTyped(KeyEvent type){//Prevent spamming syso 
-	
-	 
+		
+		
 	}
 	public void keyReleased(KeyEvent type) {
 	       //Switch characters() 	
-	
+		  isSpam = false; //Reset spam prevention
 		  
 		  //Skip Line like a typewriter. Spam on syso ends
 	}
 	
 	public void keyPressed(KeyEvent type) {
 	    //Switch characters() 
+      
+		int insp = type.getKeyCode();
 
+	
+		boolean Spam = (insp == KeyEvent.VK_SHIFT || insp == KeyEvent.VK_BACK_SPACE) ? true : false; 
+		boolean isValid;
+	
+		//Useful, reduces strain by only performing 1 array check vs multiple conditional checks.
+		if(isSpam == false) {
+			isValid = isMemberOfArray(KeyEvent.getKeyText(insp));
+			
+		}else {
+			String key2 = KeyEvent.getKeyText(insp);
+			if(key2.matches("[a-zA-Z]") == true){
+				isValid = true; //Well a-z is part of keyboard...
+				Spam = false;
+				isSpam = false;
+				
+			}else {
+				switch(key2) {
+					case "Slash":
+					case "Back Quote":
+					case "Quote":
+					case "Semicolon":
+					String deb = ReplacewithString(key2);
+					isValid = isMemberOfArray(deb);
+					Spam = false;
+					isSpam = false;
+					
+					break;
+				default:
+					isValid = false;
+				
+				}
+			}
 		
-		  if(isMemberOfArray(KeyEvent.getKeyText(type.getKeyCode()))){
-			  String key = KeyEvent.getKeyText(type.getKeyCode());
+		}
+		
+		//Check for key spam and valid key entry
+		  if(isValid == true && (Spam == false)){
+			  String key = KeyEvent.getKeyText(insp);
 			 System.out.println("Traversal: "+ key);
-		 
+		  }else if(isValid == true && (Spam == true) && (isSpam == false)) {
+			  isSpam = true; // Prevent the spam of useless chars to syso by flag
+			  String key = KeyEvent.getKeyText(insp);
+			  System.out.println("Traversal: (Spam)"+ key);
+		  }else if( isValid == true && isSpam == true) {
+			 
 		  }
 		  
 	}
 	
+
+	private String ReplacewithString(String key2) {
+		switch (key2) {
+		case "Slash":
+			return "\\";
+		case "Back Quote":
+			return "~";
+		case "Quote":
+			return "\"";
+		case "Semicolon":
+			return ";";
+		default:
+			return "UNKNOWN";
+		}
+	}
 	public boolean isMemberOfArray(String test) {
-			
+
+		System.out.println("Testing:" + test);
 		 for (String s: KeysText) {
-		        if (s.equals(test))
+		        if (s.equals(test)) {
+		        	System.out.println("Valid Catch");
 		            return true;
-		 }
+		        }
+		}
+		 
 		 return false;
-		
 	}
 	
 	
@@ -134,14 +196,7 @@ public class Keyboard extends JFrame implements KeyListener{
 					button_Ext.setAlignmentX(Component.CENTER_ALIGNMENT);
 					button_Ext.setPreferredSize(new Dimension(110,60));
 					button_Ext.setFont(new Font("Arial",Font.BOLD,12));
-					
-			/*		button_Ext.addActionListener(new ActionListener(){
-						public void actionPerformed(ActionEvent e){
-							 JButton test = (JButton)e.getSource();
-						     System.out.println(test.getText());
-						}
-					});
-			*/
+
 					kb.add(button_Ext);
 					break;
 		
@@ -152,17 +207,6 @@ public class Keyboard extends JFrame implements KeyListener{
 					button_FullHalf.setAlignmentX(Component.CENTER_ALIGNMENT);
 					button_FullHalf.setPreferredSize(new Dimension(86,60));
 					button_FullHalf.setFont(new Font("Arial",Font.BOLD,12));
-					
-				/*	button_FullHalf.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						 JButton test = (JButton)e.getSource();
-					     System.out.println(test.getText());
-					}
-					});
-					
-				 */
-					
-					
 					kb.add(button_FullHalf);
 					break;
 			
@@ -186,13 +230,6 @@ public class Keyboard extends JFrame implements KeyListener{
 				case 55:
 					JButton button_Space = new JButton(GetNextKey(i));
 					button_Space.setPreferredSize(new Dimension(335,60));
-					
-				/*	button_Space.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-					     System.out.println("Spacebar");
-					}
-					});
-				*/
 					kb.add(button_Space);
 					break;
 			//Make a r-side divider for the arrow keys
@@ -209,17 +246,6 @@ public class Keyboard extends JFrame implements KeyListener{
 					button.setAlignmentX(Component.CENTER_ALIGNMENT);
 					button.setPreferredSize(new Dimension(55,60));
 					button.setFont(new Font("Arial",Font.BOLD,12));
-			
-					/*	button.addActionListener(new ActionListener() {
-					
-						//Do in case of regular key. Spit it out to the keyboard.
-						public void actionPerformed(ActionEvent e){
-							 JButton test = (JButton)e.getSource();
-						     System.out.println(test.getText());
-						}
-						
-					});
-					*/
 					kb.add(button);
 					break;
 			}
