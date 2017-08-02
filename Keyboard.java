@@ -90,7 +90,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 	}
 	public void keyTyped(KeyEvent type){//Prevent spamming syso 
-		
+		//----//
 		
 	}
 	public void keyReleased(KeyEvent type) {
@@ -104,30 +104,35 @@ public class Keyboard extends JFrame implements KeyListener{
 	    //Switch characters() 
       
 		int insp = type.getKeyCode();
-
+		String Key = KeyEvent.getKeyText(insp);
 	
 		boolean Spam = (insp == KeyEvent.VK_SHIFT || insp == KeyEvent.VK_BACK_SPACE) ? true : false; 
 		boolean isValid;
-	
+		
+
 		//Useful, reduces strain by only performing 1 array check vs multiple conditional checks.
 		if(isSpam == false) {
-			isValid = isMemberOfArray(KeyEvent.getKeyText(insp));
+		
+			Key = ReplacewithString(Key);	
+			isValid = isMemberOfArray(Key);
 			
 		}else {
-			String key2 = KeyEvent.getKeyText(insp);
-			if(key2.matches("[a-zA-Z]") == true){
+			//Shift + letter is a-ok
+			if(Key.matches("[a-zA-Z]") == true){
 				isValid = true; //Well a-z is part of keyboard...
 				Spam = false;
 				isSpam = false;
+				//SwitchCase()
 				
 			}else {
-				switch(key2) {
+				switch(Key) {
 					case "Slash":
 					case "Back Quote":
 					case "Quote":
 					case "Semicolon":
-					String deb = ReplacewithString(key2);
-					isValid = isMemberOfArray(deb);
+					case "Equals": //Actually +
+					Key = ReplacewithString(Key);
+					isValid = isMemberOfArray(Key);
 					Spam = false;
 					isSpam = false;
 					
@@ -142,40 +147,65 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 		//Check for key spam and valid key entry
 		  if(isValid == true && (Spam == false)){
-			  String key = KeyEvent.getKeyText(insp);
-			 System.out.println("Traversal: "+ key);
+			 System.out.println("Traversal: Switch Pass "+ Key);
 		  }else if(isValid == true && (Spam == true) && (isSpam == false)) {
 			  isSpam = true; // Prevent the spam of useless chars to syso by flag
-			  String key = KeyEvent.getKeyText(insp);
-			  System.out.println("Traversal: (Spam)"+ key);
+			  System.out.println("Traversal: (Spam)"+ Key);
 		  }else if( isValid == true && isSpam == true) {
 			 
 		  }
 		  
 	}
 	
-
+//Will make caps when caps lock is pressed(or depressed)
+//With shift though: Underlines the key since 
+	
+//	private void switchAlpha(boolean Capital) {
+	
+		
+//	}
 	private String ReplacewithString(String key2) {
 		switch (key2) {
 		case "Slash":
+			return "?";
+		case "Back Slash":
 			return "\\";
 		case "Back Quote":
 			return "~";
 		case "Quote":
 			return "\"";
 		case "Semicolon":
-			return ";";
+			return ":";
+		case "Open Bracket":
+			return "[";
+		case "Close Bracket":
+			return "]";
+		case "Minus":
+			return "-";
+		case "Equals":
+			return "+";
+		case "Caps Lock":
+			return "Caps";
+		case "Comma":
+			return ",";
+		case "Period":
+			return ".";
+		case "Up":
+			return "^";
 		default:
-			return "UNKNOWN";
+			return key2;
 		}
 	}
 	public boolean isMemberOfArray(String test) {
 
 		System.out.println("Testing:" + test);
 		 for (String s: KeysText) {
-		        if (s.equals(test)) {
+		        if (s.equals(test) && test != "Down" ) {
+		        	
 		        	System.out.println("Valid Catch");
 		            return true;
+		        }else if( test == "Down") {
+		        	//for the down arrow since its also 'v'
 		        }
 		}
 		 
