@@ -18,7 +18,7 @@ public class Keyboard extends JFrame implements KeyListener{
 	private JTextArea TextArea = new JTextArea();
 	private JScrollPane TxtArea_ = new JScrollPane(TextArea);
 	private JPanel Hold = new JPanel();
-	private JPanel Kb = new JPanel();
+	protected static JPanel Kb = new JPanel();
 	private JLabel Lbl_txt = new JLabel();
 	//===============================//
 	
@@ -26,6 +26,11 @@ public class Keyboard extends JFrame implements KeyListener{
 											"Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\", //27
 											"Caps","A","S","D","F","G","H","J","K","L",":","\"","Enter", //40
 											"Shift","Z","X","C","V","B","N","M",",",".","?","","^", " "," "," ","<","v",">"};
+	private static final String [] Keystext_L = {"~","1","2","3","4","5","6","7","8","9","0","-","+","Backspace",
+												"Tab","q","w","e","r","t","y","u","i","o","p","[","]","\\", //27
+												"Caps","a","s","d","f","g","h","j","k","l",":","\"","Enter", //40
+												"Shift","z","x","c","v","b","n","m",",",".","?","","^", " "," "," ","<","v",">"};
+	
 	private boolean isSpam = false; //So shift, backsspace, etc cant be held down and destroy my syso.
 	
 	public Keyboard() {
@@ -122,7 +127,7 @@ public class Keyboard extends JFrame implements KeyListener{
 				isValid = true; //Well a-z is part of keyboard...
 				Spam = false;
 				isSpam = false;
-				//SwitchCase()
+				SwitchCase(true);
 				
 			}else {
 				switch(Key) {
@@ -148,6 +153,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		//Check for key spam and valid key entry
 		  if(isValid == true && (Spam == false)){
 			 System.out.println("Traversal: Switch Pass "+ Key);
+			 
 		  }else if(isValid == true && (Spam == true) && (isSpam == false)) {
 			  isSpam = true; // Prevent the spam of useless chars to syso by flag
 			  System.out.println("Traversal: (Spam)"+ Key);
@@ -160,10 +166,22 @@ public class Keyboard extends JFrame implements KeyListener{
 //Will make caps when caps lock is pressed(or depressed)
 //With shift though: Underlines the key since 
 	
-//	private void switchAlpha(boolean Capital) {
-	
+	private void SwitchCase(boolean Capital) {
+	for(Component c : Kb.getComponents()) {
+		if(c instanceof JButton) { //Bless you stackoverflow
+			if(Capital == true) {
+			//	(JButton)((JButton) c).setText(KeysText_L[i]);
+					
+				}
+			}else {
+				
+				
+			}
+		}
 		
-//	}
+	}
+		
+		
 	private String ReplacewithString(String key2) {
 		switch (key2) {
 		case "Slash":
@@ -204,7 +222,9 @@ public class Keyboard extends JFrame implements KeyListener{
 		        	
 		        	System.out.println("Valid Catch");
 		            return true;
-		        }else if( test == "Down") {
+		        }else if(s.equals("v") && test == "Down") {
+		        	System.out.println("Down arrow");
+		        	return true;
 		        	//for the down arrow since its also 'v'
 		        }
 		}
