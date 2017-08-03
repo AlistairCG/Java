@@ -95,31 +95,39 @@ public class Keyboard extends JFrame implements KeyListener{
 		this.setResizable(true);
 		
 	}
-	public void keyTyped(KeyEvent type){//Prevent spamming syso 
+
+	public void keyTyped(KeyEvent type){
+		
 		//----//
 		
 	}
 	
 	//Actions undertaken on key released. Mostly reset flags and uncaps shift
 	public void keyReleased(KeyEvent type) {
+		//Get Standard Key info
 		int insp = type.getKeyCode();
-	
+		String Key = KeyEvent.getKeyText(insp);
+		Key = ReplacewithString(Key);
+		
+		
+		//Remove highlight
+		HighLightKey(Key, false);
 		
 		if(insp == KeyEvent.VK_SHIFT)	
-			SwitchCase(true); //Switch!
+		SwitchCase(true); 		//Switch!
 		  isSpam = false;     //Reset spam prevention flag
 		  
-		  //Skip Line like a typewriter. Spam on syso ends
+		  
 	}
 	
 	//Inspect the key and prevent overall spam from backspace and shift.
 	//Allow Shift + chars.
-	//
 	public void keyPressed(KeyEvent type) {
 	
       
 		int insp = type.getKeyCode();
 		String Key = KeyEvent.getKeyText(insp);
+		System.out.println(Key);
 	
 		boolean Spam = (insp == KeyEvent.VK_SHIFT || insp == KeyEvent.VK_BACK_SPACE) ? true : false; 
 		boolean isValid;
@@ -147,7 +155,7 @@ public class Keyboard extends JFrame implements KeyListener{
 					case "Back Quote":
 					case "Quote":
 					case "Semicolon":
-					case "Equals": //Actually +
+					case "Equals": //Actually '+'
 					Key = ReplacewithString(Key);
 					isValid = isMemberOfArray(Key);
 					Spam = false;
@@ -165,7 +173,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 		//Check for key spam and valid key entry
 		  if(isValid == true && (Spam == false)){
-			 System.out.println("Traversal: Switch Pass "+ Key);
+			 HighLightKey(Key, true);
 			 if(insp == KeyEvent.VK_CAPS_LOCK) {
 				 	SwitchCase(!isCaps);
 				 
@@ -174,20 +182,56 @@ public class Keyboard extends JFrame implements KeyListener{
 		  }//Useable for shift only when done in sucession to another shift.
 		  else if(isValid == true && (Spam == true) && (isSpam == false)) {
 			  isSpam = true; // Prevent the spam of useless chars to syso by flag
-				
+			  HighLightKey(Key, true);
+			  
+			  
 			  if(insp == KeyEvent.VK_SHIFT)	//Change keyboard case on switch.
-					SwitchCase(false);
-			  System.out.println("Traversal: (Spam)"+ Key);
+					SwitchCase(false);			  
 		  }else if( isValid == true && isSpam == true) {
 			 //....//
 		  }
 		  
 	}
-	
-//Will make caps when caps lock or shift is pressed(or depressed)
-	
+	//Highlight a key based on if the input string being found in one of the components of Kb.
+	//Will turn off the highlight when boolean is false.
+	private void HighLightKey(String Key, boolean light) {
+		//==========Highlight=======//
+		if(light == true) {
+			
+			for(Component c : Kb.getComponents()) //Bless Stackoverflow {
+					
+				if(c instanceof JButton) {	
+					if(((JButton) c).getText().equalsIgnoreCase(Key)) {
+						((JButton) c).setBackground((new Color(25,25,25)));
+						break;
+					}		
+				}
+				
+					
+			}
+			//===========//
+			//==========Remove Highlight=========//
+		else {
+			for(Component c : Kb.getComponents()) {
+				if(c instanceof JButton) {
+					
+					if(((JButton) c).getText().equalsIgnoreCase(Key)) {
+						((JButton) c).setBackground(new JButton().getBackground()); //Default
+						break;
+					}	
+					
+					
+				}
+			}
+				
+		}
+		//==============//
+			
+		
+	}
+	//Will make caps when caps lock or shift is pressed(or depressed :( )
 	private void SwitchCase(boolean Capital) {
-		int i = 0;
+		int i = 0; //Counter
 		isCaps = Capital;
 		for(Component c : Kb.getComponents()) {
 
@@ -203,7 +247,7 @@ public class Keyboard extends JFrame implements KeyListener{
 				}
 			}
 				
-			i++;
+			i++; //Iterate and set the buttons again.
 		
 		}
 		
@@ -238,13 +282,19 @@ public class Keyboard extends JFrame implements KeyListener{
 			return ".";
 		case "Up":
 			return "^";
+		case "Left":
+			return "<";
+		case "Right":
+			return ">";
+		case "Space":
+			return " ";
 		default:
 			return key2;
 		}
 	}
 	public boolean isMemberOfArray(String test) {
 
-		System.out.println("Testing:" + test);
+		
 		 for (String s: KeysText) { //Besides case, KeysText_L isnt any different.
 		        if (s.equals(test) && test != "Down" ) {
 		        	
@@ -253,7 +303,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		        }else if(s.equals("v") && test == "Down") {
 		        	System.out.println("Down arrow");
 		        	return true;
-		        	//for the down arrow since its also 'v'
+		      
 		        }
 		}
 		 
