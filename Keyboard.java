@@ -12,7 +12,8 @@ import javax.swing.*;
  * 
  * This program designs a java typing tutor which accepts key events from a user.
  * The program will highlight valid keys upon entry by the user. 
- *
+ * The keyboard features a toggle based keyboard which will change case(initially caps per assignment picture).
+ * 
  *
  */
 @SuppressWarnings("serial")
