@@ -4,10 +4,17 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-
-
-
-
+/*
+ * Alistair Godwin
+ * SID: 020079158
+ * JAC444: Mehrnaz Zhian
+ * 
+ * 
+ * This program designs a java typing tutor which accepts key events from a user.
+ * The program will highlight valid keys upon entry by the user. 
+ *
+ *
+ */
 @SuppressWarnings("serial")
 public class Keyboard extends JFrame implements KeyListener{
 	//=======Components and Containers==============//
@@ -15,25 +22,29 @@ public class Keyboard extends JFrame implements KeyListener{
 	private JPanel Padding = new JPanel();
 	private JPanel Lbl  = new JPanel();
 	private JPanel Keys = new JPanel();
-	private JTextArea TextArea = new JTextArea();
+	private JTextArea TextArea = new JTextArea("Tap shift or caps for lowercase keys(Initial keyboard intended to look like assignment pic)! ");
 	private JScrollPane TxtArea_ = new JScrollPane(TextArea);
 	private JPanel Hold = new JPanel();
 	protected static JPanel Kb = new JPanel();
 	private JLabel Lbl_txt = new JLabel();
 	//===============================//
-	
+	//=============Keyboard Arrays============//
 	private static final String [] KeysText = {"~","1","2","3","4","5","6","7","8","9","0","-","+","Backspace",
 											"Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\", //27
 											"Caps","A","S","D","F","G","H","J","K","L",":","\"","Enter", //40
-											"Shift","Z","X","C","V","B","N","M",",",".","?","","^", " "," "," ","<","v",">"};
+											"Shift","Z","X","C","V","B","N","M",",",".","?","","^", " "," "," ","<"," v ",">"};
 	protected static final String [] Keystext_L = {"~","1","2","3","4","5","6","7","8","9","0","-","+","Backspace",
 												"Tab","q","w","e","r","t","y","u","i","o","p","[","]","\\", //27
 												"Caps","a","s","d","f","g","h","j","k","l",":","\"","Enter", //40
-												"Shift","z","x","c","v","b","n","m",",",".","?","","^", " "," "," ","<","v",">"};
+												"Shift","z","x","c","v","b","n","m",",",".","?","","^", " "," "," ","<"," v ",">"};
+	//==========================================//
+	//===========Flags=========//
+	private boolean isCaps = true; //Flag since I cant check capslock on reasonably
+	private boolean isSpam = false; //So shift, backspace, etc cant be held down and destroy my syso.
+	//=========================//
 	
-	private boolean isCaps = true; //Flag since I cant check capslock on
-	private boolean isSpam = false; //So shift, backsspace, etc cant be held down and destroy my syso.
 	
+	//Contact!
 	public Keyboard() {
 		
 		this.setTitle("Typing Tutor");
@@ -49,6 +60,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		//Eat 100% of available panel space
 		Keys.setLayout(new GridLayout(1,1));
 		
+		//Create layout and invoke key creation
 		Kb.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
 		SetKeys(Kb);
 		
@@ -60,19 +72,15 @@ public class Keyboard extends JFrame implements KeyListener{
 		TextArea.setWrapStyleWord(true);
 		//=============================//
 	
-	
 		//Display text, note HTML since JLabel supports it and means less Panels.
 		Lbl_txt.setText("<html><body><p>Type some text using your keyboard. The keys you press will be highlighted and the text"
 				+ " will be displayed.</p><p>Note: Clicking the buttons with your mouse will not perform any action </p></body> </html>");
 
-		//Lbl.setBackground(new Color(150,100,100));
-	//	Keys.setBackground(new Color(100,200,200));
-	//	Kb.setBackground(new Color(100,100,100));
-		
 		//Make space as specified by the assignment.
 		Lbl.setPreferredSize(new Dimension(827,40));
 		Keys.setPreferredSize(new Dimension(420,210));
 		Kb.setPreferredSize(new Dimension(827,300));
+	
 		//Make an invisible divider while keeping the components vertically stacked
 		Padding.setPreferredSize(new Dimension(25,20));
 			
@@ -85,10 +93,10 @@ public class Keyboard extends JFrame implements KeyListener{
 		Contain.add(Hold);
 		Contain.add(Padding);
 		Contain.add(Kb);
-		add(Contain); //Add to frame
+		add(Contain); 		
 		//============================================//
 		
-		//Set behaviour
+		//Set behavior
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -124,24 +132,25 @@ public class Keyboard extends JFrame implements KeyListener{
 	//Allow Shift + chars.
 	public void keyPressed(KeyEvent type) {
 	
-      
+      //Fetch KeyEvent information
 		int insp = type.getKeyCode();
 		String Key = KeyEvent.getKeyText(insp);
-		System.out.println(Key);
 	
+	//Check for spam and declare valid state	
 		boolean Spam = (insp == KeyEvent.VK_SHIFT || insp == KeyEvent.VK_BACK_SPACE) ? true : false; 
 		boolean isValid;
 		
 
 		//Useful, reduces strain by only performing 1 array check vs multiple conditional checks.
 		if(isSpam == false) {
-		
+			//Inspect the Key and as required change the key text to match keyboard
 			Key = ReplacewithString(Key);	
+			//Check if Key matches the available keyboard.
 			isValid = isMemberOfArray(Key);
 			
 		}else {
 		
-			//Shift + letter is a-ok
+			//Shift + letter is a-ok, just not shift on its own.
 			if(Key.matches("[a-zA-Z]") == true){
 				isValid = true; //Well a-z is part of keyboard...
 				Spam = false;
@@ -158,12 +167,11 @@ public class Keyboard extends JFrame implements KeyListener{
 					case "Equals": //Actually '+'
 					Key = ReplacewithString(Key);
 					isValid = isMemberOfArray(Key);
+					//Reset flags
 					Spam = false;
 					isSpam = false;
-					
 					break;
 				default:
-					
 					isValid = false;
 				
 				}
@@ -171,7 +179,8 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 		}
 		
-		//Check for key spam and valid key entry
+		
+		//============Check for key spam and valid key entry========//
 		  if(isValid == true && (Spam == false)){
 			 HighLightKey(Key, true);
 			 if(insp == KeyEvent.VK_CAPS_LOCK) {
@@ -179,23 +188,24 @@ public class Keyboard extends JFrame implements KeyListener{
 				 
 			 }
 			 
-		  }//Useable for shift only when done in sucession to another shift.
+		  }//Usable for shift only when done in succession to another shift or backspace.
 		  else if(isValid == true && (Spam == true) && (isSpam == false)) {
 			  isSpam = true; // Prevent the spam of useless chars to syso by flag
-			  HighLightKey(Key, true);
-			  
-			  
+			  HighLightKey(Key, true); //Light up the night
 			  if(insp == KeyEvent.VK_SHIFT)	//Change keyboard case on switch.
 					SwitchCase(false);			  
 		  }else if( isValid == true && isSpam == true) {
-			 //....//
+			 //..Do nothing..//
 		  }
+		  
+		  //==================================================//
 		  
 	}
 	//Highlight a key based on if the input string being found in one of the components of Kb.
 	//Will turn off the highlight when boolean is false.
 	private void HighLightKey(String Key, boolean light) {
 		//==========Highlight=======//
+		System.out.println("Evaluated: " + Key);
 		if(light == true) {
 			
 			for(Component c : Kb.getComponents()) //Bless Stackoverflow {
@@ -209,8 +219,8 @@ public class Keyboard extends JFrame implements KeyListener{
 				
 					
 			}
-			//===========//
-			//==========Remove Highlight=========//
+		//==================//
+		//==========Remove Highlight=========//
 		else {
 			for(Component c : Kb.getComponents()) {
 				if(c instanceof JButton) {
@@ -225,7 +235,7 @@ public class Keyboard extends JFrame implements KeyListener{
 			}
 				
 		}
-		//==============//
+		//========================//
 			
 		
 	}
@@ -233,11 +243,12 @@ public class Keyboard extends JFrame implements KeyListener{
 	private void SwitchCase(boolean Capital) {
 		int i = 0; //Counter
 		isCaps = Capital;
-		for(Component c : Kb.getComponents()) {
+		//Iterate through the keyboard
+		for(Component c : Kb.getComponents()) { //Fancy
 
 			if(c instanceof JButton) { //Bless you stackoverflow
 				if(Capital == true) {
-				
+					//Change some text to the othercase equivalent
 					((JButton) c).setText(Keystext_L[i]);
 				
 						
@@ -253,7 +264,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 	}
 		
-		
+//Replace the strings as required with the keyboard equivalent		
 	private String ReplacewithString(String key2) {
 		switch (key2) {
 		case "Slash":
@@ -288,30 +299,26 @@ public class Keyboard extends JFrame implements KeyListener{
 			return ">";
 		case "Space":
 			return " ";
+		case "Down":
+			return " v "; //Easiest hack this side of Alabama. 
 		default:
 			return key2;
 		}
 	}
+	
+	//Check if a string is a member of the array. 
+	//Small catch for down.
 	public boolean isMemberOfArray(String test) {
-
-		
 		 for (String s: KeysText) { //Besides case, KeysText_L isnt any different.
 		        if (s.equals(test) && test != "Down" ) {
-		        	
-		        	System.out.println("Valid Catch");
 		            return true;
-		        }else if(s.equals("v") && test == "Down") {
-		        	System.out.println("Down arrow");
-		        	return true;
-		      
 		        }
 		}
-		 
 		 return false;
 	}
 	
 	
-	//Write some buttons using the array and size them based on the element.
+	//Write some buttons using the array and size them based on the element requirement
 	public static void SetKeys(Container kb) {
 		for(int i = 0; i < KeysText.length; i++) {
 		
@@ -383,12 +390,12 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 	}
 	
-//Return KeysText[element]
+	//Return KeysText[element]
 	public static String GetNextKey(int arrAt) {
 		return KeysText[arrAt];
 	}
 	
-//Initialize
+	//Contact!
 	public static void main (String [] args) {
 		new Keyboard();
 	}
