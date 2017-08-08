@@ -206,14 +206,14 @@ public class Keyboard extends JFrame implements KeyListener{
 	//Will turn off the highlight when boolean is false.
 	private void HighLightKey(String Key, boolean light) {
 		//==========Highlight=======//
-		System.out.println("Evaluated: " + Key);
+
 		if(light == true) {
-			
+			System.out.println("This key pressed -->" + Key + "<--");
 			for(Component c : Kb.getComponents()) //Bless Stackoverflow {
 					
 				if(c instanceof JButton) {	
 					if(((JButton) c).getText().equalsIgnoreCase(Key)) {
-						((JButton) c).setBackground((new Color(25,25,25)));
+						((JButton) c).setBackground((new Color(25,125,125)));
 						break;
 					}		
 				}
@@ -224,7 +224,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		//==========Remove Highlight=========//
 		else {
 			for(Component c : Kb.getComponents()) {
-				if(c instanceof JButton) {
+				if(c instanceof JButton) { //Bless you stackoverflow
 					
 					if(((JButton) c).getText().equalsIgnoreCase(Key)) {
 						((JButton) c).setBackground(new JButton().getBackground()); //Default
@@ -265,7 +265,7 @@ public class Keyboard extends JFrame implements KeyListener{
 		
 	}
 		
-//Replace the strings as required with the keyboard equivalent		
+//Replace the strings as required with the keyboard character equivalent		
 	private String ReplacewithString(String key2) {
 		switch (key2) {
 		case "Slash":
@@ -308,10 +308,10 @@ public class Keyboard extends JFrame implements KeyListener{
 	}
 	
 	//Check if a string is a member of the array. 
-	//Small catch for down.
+	//Small catch for down arrow
 	public boolean isMemberOfArray(String test) {
 		 for (String s: KeysText) { //Besides case, KeysText_L isnt any different.
-		        if (s.equals(test) && test != "Down" ) {
+		        if (s.equals(test)) {
 		            return true;
 		        }
 		}
