@@ -6,13 +6,11 @@ import java.awt.event.*;
 import javax.swing.*;
 /*
  * Alistair Godwin
- * SID: 020079158
- * JAC444: Mehrnaz Zhian
- * 
+/*
  * 
  * This program designs a java typing tutor which accepts key events from a user.
  * The program will highlight valid keys upon entry by the user. 
- * The keyboard features a toggle based keyboard which will change case(initially caps per assignment picture).
+ * The keyboard features a toggle based keyboard which will change case.
  * 
  *
  */
@@ -23,11 +21,14 @@ public class Keyboard extends JFrame implements KeyListener{
 	private JPanel Padding = new JPanel();
 	private JPanel Lbl  = new JPanel();
 	private JPanel Keys = new JPanel();
-	private JTextArea TextArea = new JTextArea("Tap shift or caps for lowercase keys(Initial keyboard intended to look like assignment pic)! ");
+	private JTextArea TextArea = new JTextArea("Tap shift or caps for lowercase keys! ");
 	private JScrollPane TxtArea_ = new JScrollPane(TextArea);
 	private JPanel Hold = new JPanel();
 	protected static JPanel Kb = new JPanel();
 	private JLabel Lbl_txt = new JLabel();
+	
+	public KeyReciever keyrecv = new KeyReciever(); //<-- The Server
+	
 	//===============================//
 	//=============Keyboard Arrays============//
 	private static final String [] KeysText = {"~","1","2","3","4","5","6","7","8","9","0","-","+","Backspace",
@@ -103,6 +104,8 @@ public class Keyboard extends JFrame implements KeyListener{
 		this.setVisible(true);
 		this.setResizable(true);
 		
+		
+		
 	}
 
 	public void keyTyped(KeyEvent type){
@@ -156,7 +159,7 @@ public class Keyboard extends JFrame implements KeyListener{
 				isValid = true; //Well a-z is part of keyboard...
 				Spam = false;
 				isSpam = false;
-		
+				
 				
 			}else {
 				//Reset flags and change some string to match the keyboard.
@@ -202,6 +205,81 @@ public class Keyboard extends JFrame implements KeyListener{
 		  //==================================================//
 		  
 	}
+		//Server Client Receives data, highlight relevant key
+		//Allow Shift + chars.
+		public void keyPressed_Client(int insp) {
+			
+			String Key = KeyEvent.getKeyText(insp);
+			Key = ReplacewithString(Key);
+			
+			//Check for spam and declare valid state	
+			boolean Spam = (insp == KeyEvent.VK_SHIFT || insp == KeyEvent.VK_BACK_SPACE) ? true : false; 
+			boolean isValid;
+			
+
+			//Useful, reduces strain by only performing 1 array check vs multiple conditional checks.
+			if(isSpam == false) {
+				//Inspect the Key and as required change the key text to match keyboard
+				Key = ReplacewithString(Key);	
+				//Check if Key matches the available keyboard.
+				isValid = isMemberOfArray(Key);
+				
+			}else {
+			
+				//Shift + letter is a-ok, just not shift on its own.
+				if(Key.matches("[a-zA-Z]") == true){
+					isValid = true; //Well a-z is part of keyboard...
+					Spam = false;
+					isSpam = false;
+			
+					
+				}else {
+					//Reset flags and change some string to match the keyboard.
+					switch(Key) {
+						case "Slash":
+						case "Back Quote":
+						case "Quote":
+						case "Semicolon":
+						case "Equals": //Actually '+'
+						Key = ReplacewithString(Key);
+						isValid = isMemberOfArray(Key);
+						//Reset flags
+						Spam = false;
+						isSpam = false;
+						break;
+					default:
+						isValid = false;
+					
+					}
+				}
+			
+			}
+			
+			
+			//============Check for key spam and valid key entry========//
+			  if(isValid == true && (Spam == false)){
+				 HighLightKey(Key, true);
+				 if(insp == KeyEvent.VK_CAPS_LOCK) {
+					 	SwitchCase(!isCaps);
+					 
+				 }
+				 
+			  }//Usable for shift only when done in succession to another shift or backspace.
+			  else if(isValid == true && (Spam == true) && (isSpam == false)) {
+				  isSpam = true; // Prevent the spam of useless chars to syso by flag
+				  HighLightKey(Key, true); //Light up the night
+				  if(insp == KeyEvent.VK_SHIFT)	//Change keyboard case on switch.
+						SwitchCase(false);			  
+			  }else if( isValid == true && isSpam == true) {
+				 //..Do nothing..//
+			  }
+			  
+			  //==================================================//
+			  
+		}
+		
+		
+		
 	//Highlight a key based on if the input string being found in one of the components of Kb.
 	//Will turn off the highlight when boolean is false.
 	private void HighLightKey(String Key, boolean light) {
